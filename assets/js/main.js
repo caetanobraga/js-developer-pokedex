@@ -1,5 +1,6 @@
 const pokemonList = document.getElementById('pokemonList')
 const loadMoreButton = document.getElementById('loadMoreButton')
+let pokemonTogled = []
 
 const maxRecords = 151
 const limit = 10
@@ -7,11 +8,10 @@ let offset = 0;
 
 function convertPokemonToLi(pokemon) {
     return `
-        <li class="pokemon ${pokemon.type}">
+        <li class="pokemon ${pokemon.type}" onclick='togleDetalhes(${JSON.stringify(pokemon)})'>
             <span class="number">#${pokemon.number}</span>
             <span class="name">${pokemon.name}</span>
-
-            <div class="detail">
+            <div class="detail" id='${pokemon.name}'>
                 <ol class="types">
                     ${pokemon.types.map((type) => `<li class="type ${type}">${type}</li>`).join('')}
                 </ol>
@@ -21,6 +21,19 @@ function convertPokemonToLi(pokemon) {
             </div>
         </li>
     `
+}
+function togleDetalhes(pokemon){
+    const pokemonSelecionado = document.getElementById(pokemon.name)
+    const pokemonProcurado = pokemonTogled.find(item => item === pokemon.name)
+    if (!pokemonProcurado){
+        pokemonSelecionado.style.height = "500px"
+        pokemonTogled = [...pokemonTogled,pokemon.name]
+    }else{
+        pokemonTogled.splice(pokemonTogled.indexOf(pokemon.name),1)
+        pokemonSelecionado.style.height = "50px"
+
+    }
+    
 }
 
 function loadPokemonItens(offset, limit) {
